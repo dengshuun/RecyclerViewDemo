@@ -14,7 +14,8 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 /**
- * Created by 赵晨璞 on 2016/6/19.
+ * Created by 赵晨璞
+ * on 2016/6/19.
  */
 
 public class GridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener, View.OnLongClickListener {
