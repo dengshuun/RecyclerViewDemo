@@ -34,7 +34,7 @@
             android:background="#f84d4d"
             android:layout_width="80dp"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:padding="10dp"
             android:gravity="center"
             android:textColor="#ffffff"
             android:text="删除本item"/>

@@ -158,6 +158,7 @@ public class StaggeredActivity extends AppCompatActivity {
                 } else {
                     List<Girl> more = gson.fromJson(jsonData, new TypeToken<List<Girl>>() {
                     }.getType());
+                    assert more != null;
                     girls.addAll(more);
                     Girl pages = new Girl();
                     pages.setPage(page);
