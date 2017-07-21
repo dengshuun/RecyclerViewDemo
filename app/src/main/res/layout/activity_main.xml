@@ -17,6 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="线性布局" />
+
     <Button
         android:id="@+id/line2"
         android:layout_margin="20dp"
@@ -26,14 +27,14 @@
 
     <Button
         android:id="@+id/grid"
-        android:layout_margin="30dp"
+        android:layout_margin="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="网格布局" />
 
     <Button
         android:id="@+id/staggered"
-        android:layout_margin="30dp"
+        android:layout_margin="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="交错网格布局" />

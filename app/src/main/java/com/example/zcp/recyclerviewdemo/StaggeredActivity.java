@@ -19,7 +19,6 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Collections;
 import java.util.List;
 
 public class StaggeredActivity extends AppCompatActivity {
@@ -27,10 +26,10 @@ public class StaggeredActivity extends AppCompatActivity {
     private static RecyclerView recyclerview;
     private CoordinatorLayout coordinatorLayout;
     private GridAdapter mAdapter;
-    private List<Meizi> meizis;
+    private List<Girl> girls;
     private StaggeredGridLayoutManager mLayoutManager;
-    private int lastVisibleItem ;
-    private int page=1;
+    private int lastVisibleItem;
+    private int page = 1;
     private ItemTouchHelper itemTouchHelper;
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -48,46 +47,46 @@ public class StaggeredActivity extends AppCompatActivity {
 
     }
 
-    private void initView(){
-        coordinatorLayout=(CoordinatorLayout)findViewById(R.id.staggered_coordinatorLayout);
+    private void initView() {
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.staggered_coordinatorLayout);
 
-        recyclerview=(RecyclerView)findViewById(R.id.staggered_recycler);
-        mLayoutManager=new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        recyclerview = (RecyclerView) findViewById(R.id.staggered_recycler);
+        mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerview.setLayoutManager(mLayoutManager);
 
-        swipeRefreshLayout=(SwipeRefreshLayout) findViewById(R.id.staggered_swipe_refresh) ;
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,R.color.colorPrimaryDark,R.color.colorAccent);
-        swipeRefreshLayout.setProgressViewOffset(false, 0,  (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.staggered_swipe_refresh);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorAccent);
+        swipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
 
     }
 
-    private void setListener(){
+    private void setListener() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                page=1;
+                page = 1;
                 new GetData().execute("http://gank.io/api/data/福利/10/1");
             }
         });
 
-        itemTouchHelper=new ItemTouchHelper(new ItemTouchHelper.Callback() {
+        itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                int dragFlags=0;
-                if(recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager){
-                    dragFlags=ItemTouchHelper.UP|ItemTouchHelper.DOWN|ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT;
+                int dragFlags = 0;
+                if (recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
+                    dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
                 }
-                return makeMovementFlags(dragFlags,0);
+                return makeMovementFlags(dragFlags, 0);
             }
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                int from=viewHolder.getAdapterPosition();
-                int to=target.getAdapterPosition();
-                Meizi moveItem=meizis.get(from);
-                meizis.remove(from);
-                meizis.add(to,moveItem);
-                mAdapter.notifyItemMoved(from,to);
+                int from = viewHolder.getAdapterPosition();
+                int to = target.getAdapterPosition();
+                Girl moveItem = girls.get(from);
+                girls.remove(from);
+                girls.add(to, moveItem);
+                mAdapter.notifyItemMoved(from, to);
                 return true;
             }
 
@@ -108,16 +107,16 @@ public class StaggeredActivity extends AppCompatActivity {
                 super.onScrollStateChanged(recyclerView, newState);
 //                0：当前屏幕停止滚动；1时：屏幕在滚动 且 用户仍在触碰或手指还在屏幕上；2时：随用户的操作，屏幕上产生的惯性滑动；
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
-                        && lastVisibleItem +2>=mLayoutManager.getItemCount()) {
-                    new GetData().execute("http://gank.io/api/data/福利/10/"+(++page));
+                        && lastVisibleItem + 2 >= mLayoutManager.getItemCount()) {
+                    new GetData().execute("http://gank.io/api/data/福利/10/" + (++page));
                 }
             }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int[] positions= mLayoutManager.findLastVisibleItemPositions(null);
-                lastVisibleItem = Math.max(positions[0],positions[1]);
+                int[] positions = mLayoutManager.findLastVisibleItemPositions(null);
+                lastVisibleItem = Math.max(positions[0], positions[1]);
             }
         });
     }
@@ -138,11 +137,11 @@ public class StaggeredActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            if(!TextUtils.isEmpty(result)){
+            if (!TextUtils.isEmpty(result)) {
 
                 JSONObject jsonObject;
-                Gson gson=new Gson();
-                String jsonData=null;
+                Gson gson = new Gson();
+                String jsonData = null;
 
                 try {
                     jsonObject = new JSONObject(result);
@@ -150,28 +149,30 @@ public class StaggeredActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if(meizis==null||meizis.size()==0){
-                    meizis= gson.fromJson(jsonData, new TypeToken<List<Meizi>>() {}.getType());
-                    Meizi pages=new Meizi();
+                if (girls == null || girls.size() == 0) {
+                    girls = gson.fromJson(jsonData, new TypeToken<List<Girl>>() {
+                    }.getType());
+                    Girl pages = new Girl();
                     pages.setPage(page);
-                    meizis.add(pages);
-                }else{
-                    List<Meizi> more= gson.fromJson(jsonData, new TypeToken<List<Meizi>>() {}.getType());
-                    meizis.addAll(more);
-                    Meizi pages=new Meizi();
+                    girls.add(pages);
+                } else {
+                    List<Girl> more = gson.fromJson(jsonData, new TypeToken<List<Girl>>() {
+                    }.getType());
+                    girls.addAll(more);
+                    Girl pages = new Girl();
                     pages.setPage(page);
-                    meizis.add(pages);
+                    girls.add(pages);
                 }
 
-                if(mAdapter==null){
-                    recyclerview.setAdapter(mAdapter = new GridAdapter(StaggeredActivity.this,meizis));
+                if (mAdapter == null) {
+                    recyclerview.setAdapter(mAdapter = new GridAdapter(StaggeredActivity.this, girls));
 
                     //设置点击监听
                     mAdapter.setOnItemClickListener(new GridAdapter.OnRecyclerViewItemClickListener() {
                         @Override
                         public void onItemClick(View view) {
-                            int position=recyclerview.getChildAdapterPosition(view);
-                            SnackbarUtil.ShortSnackbar(coordinatorLayout,"点击第"+position+"个",SnackbarUtil.Info).show();
+                            int position = recyclerview.getChildAdapterPosition(view);
+                            SnackbarUtil.ShortSnackbar(coordinatorLayout, "点击第" + position + "个", SnackbarUtil.Info).show();
                         }
 
                         @Override
@@ -181,7 +182,7 @@ public class StaggeredActivity extends AppCompatActivity {
                     });
 
                     itemTouchHelper.attachToRecyclerView(recyclerview);
-                }else{
+                } else {
                     mAdapter.notifyDataSetChanged();
                 }
             }

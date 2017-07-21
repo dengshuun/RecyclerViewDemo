@@ -20,7 +20,6 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Collections;
 import java.util.List;
 
 //网格布局示例
@@ -29,7 +28,7 @@ public class GridActivity extends AppCompatActivity {
     private static RecyclerView recyclerview;
     private CoordinatorLayout coordinatorLayout;
     private GridAdapter mAdapter;
-    private List<Meizi> meizis;
+    private List<Girl> girls;
     private GridLayoutManager mLayoutManager;
     private int lastVisibleItem;
     private int page=1;
@@ -88,9 +87,9 @@ public class GridActivity extends AppCompatActivity {
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 int from=viewHolder.getAdapterPosition();
                 int to=target.getAdapterPosition();
-                Meizi moveItem=meizis.get(from);
-                meizis.remove(from);
-                meizis.add(to,moveItem);
+                Girl moveItem= girls.get(from);
+                girls.remove(from);
+                girls.add(to,moveItem);
                 mAdapter.notifyItemMoved(from,to);
                 return true;
             }
@@ -159,21 +158,21 @@ public class GridActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if(meizis==null||meizis.size()==0){
-                    meizis= gson.fromJson(jsonData, new TypeToken<List<Meizi>>() {}.getType());
-                    Meizi pages=new Meizi();
+                if(girls ==null|| girls.size()==0){
+                    girls = gson.fromJson(jsonData, new TypeToken<List<Girl>>() {}.getType());
+                    Girl pages=new Girl();
                     pages.setPage(page);
-                    meizis.add(pages);
+                    girls.add(pages);
                 }else{
-                    List<Meizi> more= gson.fromJson(jsonData, new TypeToken<List<Meizi>>() {}.getType());
-                    meizis.addAll(more);
-                    Meizi pages=new Meizi();
+                    List<Girl> more= gson.fromJson(jsonData, new TypeToken<List<Girl>>() {}.getType());
+                    girls.addAll(more);
+                    Girl pages=new Girl();
                     pages.setPage(page);
-                    meizis.add(pages);
+                    girls.add(pages);
                 }
 
                 if(mAdapter==null){
-                    recyclerview.setAdapter(mAdapter = new GridAdapter(GridActivity.this,meizis));
+                    recyclerview.setAdapter(mAdapter = new GridAdapter(GridActivity.this, girls));
 
                     mAdapter.setOnItemClickListener(new GridAdapter.OnRecyclerViewItemClickListener() {
                         @Override

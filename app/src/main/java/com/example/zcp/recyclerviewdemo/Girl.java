@@ -1,10 +1,12 @@
 package com.example.zcp.recyclerviewdemo;
 
 /**
- * Created by 赵晨璞 on 2016/6/16.
+ * Created by 赵晨璞
+ * on 2016/6/16.
  */
-public class Meizi {
-    public String getUrl() {
+
+class Girl {
+    String getUrl() {
         return url;
     }
 
@@ -14,11 +16,11 @@ public class Meizi {
 
     private String url;
 
-    public int getPage() {
+    int getPage() {
         return page;
     }
 
-    public void setPage(int page) {
+    void setPage(int page) {
         this.page = page;
     }
 
